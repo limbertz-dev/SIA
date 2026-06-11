@@ -18,6 +18,7 @@ from app.modules.auth.services.auth_service import AuthService
 from app.modules.incidentes.controllers import controllers_incidentes
 from sqlalchemy.orm import Session
 from app.core.database import get_db
+from app.config.config import Config
 
 load_dotenv()
 
@@ -29,11 +30,7 @@ app = FastAPI(
 )
 
 # Configurar CORS
-origins = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:8080",
-]
+origins = Config.CORS_ORIGINS
 
 app.add_middleware(
     CORSMiddleware,
