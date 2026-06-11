@@ -1,9 +1,9 @@
 // src\lib\api\incidentes.ts
 import type { IncidenteAPI } from "$lib/types/incidentes";
-import { INCIDENTES_API_URL } from "$lib/api/config";
+import { apiUrl } from "$lib/api/config";
 
 export async function getIncidentes(): Promise<IncidenteAPI[]> {
-  const res = await fetch(`${INCIDENTES_API_URL}/incidentes`);
+  const res = await fetch(apiUrl("/api/Incidentes/incidentes"));
 
   if (!res.ok) {
     throw new Error("Error al obtener incidentes");
@@ -13,7 +13,7 @@ export async function getIncidentes(): Promise<IncidenteAPI[]> {
 }
 
 export async function crearIncidente(data: any) {
-  const res = await fetch(`${INCIDENTES_API_URL}/incidentes`, {
+  const res = await fetch(apiUrl("/api/Incidentes/incidentes"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)

@@ -4,10 +4,7 @@ import type {
   NotificacionCreate,
   NotificacionRead,
 } from "$lib/types/notificaciones";
-import { INCIDENTES_API_URL } from "$lib/api/config";
-
-// Prefijo base del router de incidentes
-const API = INCIDENTES_API_URL;
+import { apiUrl } from "$lib/api/config";
 
 /**
  * Crear una nueva notificación.
@@ -17,7 +14,7 @@ const API = INCIDENTES_API_URL;
 export async function crearNotificacion(
   payload: NotificacionCreate
 ): Promise<NotificacionRead> {
-  const res = await fetch(`${API}/notificaciones`, {
+  const res = await fetch(apiUrl("/api/Incidentes/notificaciones"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -39,7 +36,7 @@ export async function crearNotificacion(
 export async function obtenerNotificacion(
   id_notificacion: number
 ): Promise<NotificacionRead> {
-  const res = await fetch(`${API}/notificaciones/${id_notificacion}`);
+  const res = await fetch(apiUrl(`/api/Incidentes/notificaciones/${id_notificacion}`));
 
   if (!res.ok) {
     const error = await res.text();
@@ -66,7 +63,7 @@ export async function obtenerNotificacionesUsuario(
     params.append("limit", String(limit));
   }
 
-  const url = `${API}/notificaciones/${id_usuario}?${params.toString()}`;
+  const url = apiUrl(`/api/Incidentes/notificaciones/${id_usuario}?${params.toString()}`);
   const res = await fetch(url);
 
   if (!res.ok) {
@@ -91,7 +88,7 @@ export async function marcarNotificacionComoLeida(
   params.append("id_usuario", String(id_usuario));
 
   const res = await fetch(
-    `${API}/notificaciones/${id_notificacion}/leer?${params.toString()}`,
+    apiUrl(`/api/Incidentes/notificaciones/${id_notificacion}/leer?${params.toString()}`),
     {
       method: "PATCH",
     }
@@ -115,7 +112,7 @@ export async function marcarNotificacionComoLeida(
 export async function marcarTodasComoLeidas(
   id_usuario: number
 ): Promise<number> {
-  const res = await fetch(`${API}/notificaciones/${id_usuario}/leer-todas`, {
+  const res = await fetch(apiUrl(`/api/Incidentes/notificaciones/${id_usuario}/leer-todas`), {
     method: "PATCH",
   });
 

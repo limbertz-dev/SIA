@@ -1,17 +1,17 @@
 // src/lib/api/situaciones.ts
 
-import { INCIDENTES_API_URL } from "$lib/api/config";
+import { apiUrl } from "$lib/api/config";
 
 // GET — listar situaciones
 export async function getSituaciones() {
-  const res = await fetch(`${INCIDENTES_API_URL}/situaciones`);
+  const res = await fetch(apiUrl("/api/Incidentes/situaciones"));
   if (!res.ok) throw new Error("Error al obtener situaciones");
   return res.json();
 }
 
 // POST — crear situación
 export async function crearSituacion(data: any) {
-  const res = await fetch(`${INCIDENTES_API_URL}/situaciones`, {
+  const res = await fetch(apiUrl("/api/Incidentes/situaciones"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -23,7 +23,7 @@ export async function crearSituacion(data: any) {
 
 // PUT — actualizar situación
 export async function actualizarSituacion(id_situacion: number, data: any) {
-  const res = await fetch(`${INCIDENTES_API_URL}/situaciones/${id_situacion}`, {
+  const res = await fetch(apiUrl(`/api/Incidentes/situaciones/${id_situacion}`), {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -35,7 +35,7 @@ export async function actualizarSituacion(id_situacion: number, data: any) {
 
 // DELETE — borrar situación
 export async function eliminarSituacion(id_situacion: number) {
-  const res = await fetch(`${INCIDENTES_API_URL}/situaciones/${id_situacion}`, {
+  const res = await fetch(apiUrl(`/api/Incidentes/situaciones/${id_situacion}`), {
     method: "DELETE"
   });
 

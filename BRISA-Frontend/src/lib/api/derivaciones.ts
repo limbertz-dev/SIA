@@ -1,16 +1,14 @@
 // src/lib/api/derivaciones.ts
 
 import type { DerivacionCreate, DerivacionRead } from "$lib/types/derivaciones";
-import { INCIDENTES_API_URL } from "$lib/api/config";
-
-const API = INCIDENTES_API_URL;
+import { apiUrl } from "$lib/api/config";
 
 export async function crearDerivacion(
   id_incidente: number,
   payload: DerivacionCreate
 ): Promise<DerivacionRead> {
 
-  const res = await fetch(`${API}/derivaciones/${id_incidente}`, {
+  const res = await fetch(apiUrl(`/api/Incidentes/derivaciones/${id_incidente}`), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
