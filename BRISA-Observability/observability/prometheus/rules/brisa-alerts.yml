@@ -1,0 +1,38 @@
+groups:
+  - name: brisa-backend
+    rules:
+      - alert: BrisaBackendDown
+        expr: up{job="brisa-backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "BRISA backend no responde"
+          description: "Prometheus no puede scrapear /metrics del backend por mas de 1 minuto."
+
+      - alert: BrisaHighHttp5xxRate
+        expr: (sum(rate(http_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(http_requests_total[5m])), 1)) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Tasa alta de errores 5xx"
+          description: "Mas del 5% de las peticiones HTTP estan fallando con codigos 5xx."
+
+      - alert: BrisaHighLatencyP95
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Latencia P95 alta"
+          description: "La latencia P95 del backend supera 1 segundo durante 5 minutos."
+
+      - alert: BrisaPrometheusTargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Target Prometheus caido"
+          description: "El target {{ $labels.job }} / {{ $labels.instance }} esta caido."

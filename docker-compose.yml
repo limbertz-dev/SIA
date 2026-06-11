@@ -75,6 +75,7 @@ services:
       - "9090"
     volumes:
       - ./BRISA-Observability/observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./BRISA-Observability/observability/prometheus/rules:/etc/prometheus/rules:ro
       - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -83,6 +84,32 @@ services:
     depends_on:
       - backend
       - tempo
+    networks:
+      - brisa_network
+
+  loki:
+    image: grafana/loki:3.2.1
+    restart: always
+    expose:
+      - "3100"
+    volumes:
+      - ./BRISA-Observability/observability/loki/loki.yaml:/etc/loki/loki.yaml:ro
+      - loki_data:/loki
+    command: ["-config.file=/etc/loki/loki.yaml"]
+    networks:
+      - brisa_network
+
+  promtail:
+    image: grafana/promtail:3.2.1
+    restart: always
+    volumes:
+      - ./BRISA-Observability/observability/promtail/promtail.yaml:/etc/promtail/promtail.yaml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - promtail_positions:/tmp
+    command: ["-config.file=/etc/promtail/promtail.yaml"]
+    depends_on:
+      - loki
     networks:
       - brisa_network
 
@@ -115,9 +142,12 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./BRISA-Observability/observability/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./BRISA-Observability/observability/grafana/provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      - ./BRISA-Observability/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - prometheus
       - tempo
+      - loki
     networks:
       - brisa_network
 
@@ -130,3 +160,5 @@ volumes:
   prometheus_data:
   tempo_data:
   grafana_data:
+  loki_data:
+  promtail_positions:
