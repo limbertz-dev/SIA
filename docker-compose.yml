@@ -1,0 +1,76 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: brisa_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./bienestar_estudiantil_3.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - brisa_network
+
+  backend:
+    build:
+      context: ./BRISA-Backend
+      dockerfile: Dockerfile
+    container_name: brisa_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./BRISA-Backend:/app
+    environment:
+      - APP_ENV=${APP_ENV}
+      - ENV=${APP_ENV}
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT}
+      - OTEL_SERVICE_NAME=${OTEL_SERVICE_NAME}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn run:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - brisa_network
+
+  frontend:
+    build:
+      context: ./BRISA-Frontend
+      dockerfile: Dockerfile
+    container_name: brisa_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      - PUBLIC_API_URL=${PUBLIC_API_URL}
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+    depends_on:
+      - backend
+    networks:
+      - brisa_network
+
+networks:
+  brisa_network:
+    name: brisa_network
+    driver: bridge
+
+volumes:
+  mysql_data:
