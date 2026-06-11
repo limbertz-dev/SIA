@@ -1,15 +1,14 @@
 services:
   db:
     image: mysql:8.0
-    container_name: brisa_mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./bienestar_estudiantil_3.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -29,10 +28,9 @@ services:
     build:
       context: ./BRISA-Backend
       dockerfile: Dockerfile
-    container_name: brisa_backend
     restart: always
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     volumes:
       - ./BRISA-Backend:/app
     environment:
@@ -54,10 +52,9 @@ services:
     build:
       context: ./BRISA-Frontend
       dockerfile: Dockerfile
-    container_name: brisa_frontend
     restart: always
-    ports:
-      - "5173:5173"
+    expose:
+      - "5173"
     environment:
       - PUBLIC_API_URL=${PUBLIC_API_URL}
       - NODE_ENV=${NODE_ENV}
@@ -69,7 +66,6 @@ services:
 
 networks:
   brisa_network:
-    name: brisa_network
     driver: bridge
 
 volumes:
