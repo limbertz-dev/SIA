@@ -57,12 +57,12 @@ services:
         PUBLIC_API_URL: ${PUBLIC_API_URL}
     restart: always
     expose:
-      - "5173"
+      - "${PORT:?PORT is required}"
     environment:
       VITE_API_URL: ${VITE_API_URL}
       PUBLIC_API_URL: ${PUBLIC_API_URL}
-      NODE_ENV: ${NODE_ENV}
-      PORT: ${PORT}
+      NODE_ENV: ${NODE_ENV:?NODE_ENV is required}
+      PORT: ${PORT:?PORT is required}
     depends_on:
       - backend
     networks:
