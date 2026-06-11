@@ -52,13 +52,17 @@ services:
     build:
       context: ./BRISA-Frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        PUBLIC_API_URL: ${PUBLIC_API_URL}
     restart: always
     expose:
       - "5173"
     environment:
-      - PUBLIC_API_URL=${PUBLIC_API_URL}
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
+      VITE_API_URL: ${VITE_API_URL}
+      PUBLIC_API_URL: ${PUBLIC_API_URL}
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
     depends_on:
       - backend
     networks:
