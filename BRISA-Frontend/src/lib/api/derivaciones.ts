@@ -1,8 +1,9 @@
 // src/lib/api/derivaciones.ts
 
 import type { DerivacionCreate, DerivacionRead } from "$lib/types/derivaciones";
+import { INCIDENTES_API_URL } from "$lib/api/config";
 
-const API = "http://localhost:8000/api/Incidentes"; // ajusta si tu prefijo es /api
+const API = INCIDENTES_API_URL;
 
 export async function crearDerivacion(
   id_incidente: number,

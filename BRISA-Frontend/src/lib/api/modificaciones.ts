@@ -1,7 +1,8 @@
 // src\lib\api\modificaciones.ts
 import type { IncidenteUpdate, ModificacionHistorial } from "$lib/types/modificaciones";
+import { INCIDENTES_API_URL } from "$lib/api/config";
 
-const API = "http://localhost:8000/api/Incidentes";
+const API = INCIDENTES_API_URL;
 
 export async function modificarIncidente(id: number, data: IncidenteUpdate) {
   const res = await fetch(`${API}/modificaciones/${id}`, {

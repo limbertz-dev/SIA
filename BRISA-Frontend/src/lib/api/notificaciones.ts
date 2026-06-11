@@ -4,9 +4,10 @@ import type {
   NotificacionCreate,
   NotificacionRead,
 } from "$lib/types/notificaciones";
+import { INCIDENTES_API_URL } from "$lib/api/config";
 
 // Prefijo base del router de incidentes
-const API = "http://localhost:8000/api/Incidentes";
+const API = INCIDENTES_API_URL;
 
 /**
  * Crear una nueva notificación.

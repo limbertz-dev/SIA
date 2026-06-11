@@ -1,6 +1,5 @@
 import type { AdjuntoRead } from "$lib/types/adjuntos";
-
-const API_URL = "http://localhost:8000/api/Incidentes";
+import { INCIDENTES_API_URL } from "$lib/api/config";
 
 // ===================================================
 // 1️⃣ SUBIR ADJUNTO
@@ -18,7 +17,7 @@ export async function subirAdjunto(
     form.append("id_subido_por", String(subido_por));
   }
 
-  const res = await fetch(`${API_URL}/adjuntos/${id_incidente}`, {
+  const res = await fetch(`${INCIDENTES_API_URL}/adjuntos/${id_incidente}`, {
     method: "POST",
     body: form,
   });
@@ -38,7 +37,7 @@ export async function obtenerAdjuntosPorIncidente(
   id_incidente: number
 ): Promise<AdjuntoRead[]> {
 
-  const res = await fetch(`${API_URL}/adjuntos/${id_incidente}`);
+  const res = await fetch(`${INCIDENTES_API_URL}/adjuntos/${id_incidente}`);
 
   if (!res.ok) {
     throw new Error("Error al obtener adjuntos");
@@ -51,7 +50,7 @@ export async function obtenerAdjuntosPorIncidente(
 // 3️⃣ DESCARGAR ARCHIVO INDIVIDUAL
 // ===================================================
 export async function descargarAdjunto(id_adjunto: number): Promise<void> {
-  const url = `${API_URL}/adjuntos/${id_adjunto}`;
+  const url = `${INCIDENTES_API_URL}/adjuntos/${id_adjunto}`;
 
   const res = await fetch(url);
   const blob = await res.blob();
@@ -75,7 +74,7 @@ export async function descargarAdjunto(id_adjunto: number): Promise<void> {
 // 5️⃣ BORRAR ADJUNTO INDIVIDUAL
 // ===================================================
 export async function borrarAdjunto(id_adjunto: number): Promise<void> {
-  const res = await fetch(`${API_URL}/adjuntos/${id_adjunto}`, {
+  const res = await fetch(`${INCIDENTES_API_URL}/adjuntos/${id_adjunto}`, {
     method: "DELETE",
   });
 

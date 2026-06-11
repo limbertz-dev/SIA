@@ -1,14 +1,14 @@
 // src\lib\api\areas.ts
-const API_URL = "http://localhost:8000/api/Incidentes";
+import { INCIDENTES_API_URL } from "$lib/api/config";
 
 export async function getAreas() {
-  const res = await fetch(`${API_URL}/areas`);
+  const res = await fetch(`${INCIDENTES_API_URL}/areas`);
   if (!res.ok) throw new Error("Error al obtener áreas");
   return res.json();
 }
 
 export async function crearArea(data: any) {
-  const res = await fetch(`${API_URL}/areas`, {
+  const res = await fetch(`${INCIDENTES_API_URL}/areas`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -18,7 +18,7 @@ export async function crearArea(data: any) {
 }
 
 export async function actualizarArea(id_area: number, data: any) {
-  const res = await fetch(`${API_URL}/areas/${id_area}`, {
+  const res = await fetch(`${INCIDENTES_API_URL}/areas/${id_area}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -28,7 +28,7 @@ export async function actualizarArea(id_area: number, data: any) {
 }
 
 export async function eliminarArea(id_area: number) {
-  const res = await fetch(`${API_URL}/areas/${id_area}`, {
+  const res = await fetch(`${INCIDENTES_API_URL}/areas/${id_area}`, {
     method: "DELETE"
   });
   if (!res.ok) throw new Error("Error al eliminar área");
